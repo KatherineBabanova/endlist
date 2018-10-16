@@ -1,0 +1,32 @@
+package main
+
+import (
+	"net"
+	"bufio"
+	"log"
+)
+
+const (
+	CONN_HOST = "10.10.10.14"
+	CONN_PORT = "4567"
+	CONN_TYPE = "tcp"
+)
+
+func main()  {
+	conn, err := net.Dial(CONN_TYPE, CONN_HOST + ":" + CONN_PORT)
+	if err != nil {
+		log.Println("error: ", err)
+		return
+	}
+	for {
+		reader := bufio.NewReader(conn)
+		size := reader.Size()
+		b := make([]byte, size)
+		n, err := reader.Read(b)
+		if err != nil {
+			log.Println("error: ", err)
+			return
+		}
+		log.Println("n bytes from server: ",  n)
+	}
+}
